@@ -1,17 +1,27 @@
 require( 'dotenv' ).config();
 
 const express = require( 'express' );
+const { dbConnection } = require( './database/config' );
+const cors = require( 'cors' );
 
-// crear servidor de express
+// Crear servidor de express
 const app = express();
+
+// Base de datos
+dbConnection();
+
+// CORS
+app.use( cors() );
 
 // Directorio publico
 app.use( express.static( 'public' ) );
 
+// Lectura y parse del body
+app.use( express.json() );
+
 // rutas
-// app.get( '/', ( req, res ) => {
-//     res.json( { message: 'Hello stranger' } );
-// } );
+app.use( '/api/auth', require( './routes/auth' ) );
+app.use( '/api/events', require( './routes/events' ) );
 
 // escuchar peticiones
 app.listen( process.env.PORT, () => {

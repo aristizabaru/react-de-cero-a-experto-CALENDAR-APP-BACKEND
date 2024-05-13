@@ -12,7 +12,7 @@ const crearUsuario = async ( req, res = response ) => {
 
         let usuario = await Usuario.findOne( { email } );
         if ( usuario ) {
-            res.status( 400 ).json( {
+            return res.status( 400 ).json( {
                 ok: false,
                 message: 'Un usuario existe con ese correo',
             } );
@@ -22,7 +22,7 @@ const crearUsuario = async ( req, res = response ) => {
 
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
-        usuario.password = bcrypt.hashSync( usuario.toString(), salt );
+        usuario.password = bcrypt.hashSync( password.toString(), salt );
 
         await usuario.save();
 
@@ -96,6 +96,8 @@ const revalidarToken = async ( req, res = response ) => {
 
     res.json( {
         ok: true,
+        uid,
+        name,
         token,
     } );
 };
